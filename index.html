@@ -7,17 +7,17 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --bg: #fff5f5; --card: #ffffff; --text: #4a2828; --accent: #ff6b6b; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#ffdfdf 1px, transparent 1px); background-size: 20px 20px; }
         
-        /* Slide Styling */
-        .slide { background: var(--card); border-radius: 30px; padding: 2.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; display: none; border: 4px solid #ffecec; }
-        .slide.active { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .slide { background: var(--card); border-radius: 30px; padding: 2.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2); text-align: center; display: none; border: 4px solid #ffecec; transition: transform 0.3s; }
+        .slide.active { display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
         .arrow-nav { margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .btn { background: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; font-weight: bold; cursor: pointer; }
-        h1 { color: var(--accent); margin-bottom: 1rem; }
+        .btn { background: var(--accent); color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        h1 { color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem; }
     </style>
 </head>
 <body>
@@ -25,47 +25,51 @@
 <div id="deck"></div>
 
 <script>
-    const content = [
-        { title: "Welcome!", text: "Happy 26th birthday, my love! ❤️ [Click Start]" },
-        "Your snaggletooth smile - When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!",
-        "Your big pout - Whether it's a video call or in the flesh, your big pout is a real charmer!",
-        "Your bedhead - When you just got up and your hair is sticking in every direction!",
-        "When you do your little dance routine - The bang, the boogey, and the boobie!",
-        "The way you call me \"Bebe\" when you're worried - Your tone, your eyes, your body language!",
-        "The way you call me babe out loud - Somehow I feel like I'm blushing internally hehe.",
-        "The way you take care of your skin - I hope you could stick with using lip masks though hehe!",
-        "The way your hand always looks for me - Your hands always make sure you got me.",
-        "Speaking of hands - The way you lick the back of my hand sneakily!",
-        "The way you initiate to kiss - When you lean slow, smiling a little.",
-        "Talking about kisses - I love when you shower me with smoochy kisses!",
-        "The way you squeeze your eyes when you laugh so hard - You're totally a baby!",
-        "The tight hugs before you go - The tight hugs get extra necessary.",
-        "Your big sneaky hands - [Censored]",
-        "Your little bilins - Make me feel so taken care of. (Just don't go overboard >_<)",
-        "The way you started taking pictures of our food - You're so thoughtful.",
-        "The way you take on my challenge when I put vegetables on your plate - I love that you take on the challenge!",
-        "Your smoochy videos - It's really cute and the perspective makes your pout look bigger!",
-        "The way you care for Katchan - You're really his long lost dad!",
-        "The way we welcome each other with hugs/kisses before your shifts - I can finally put my guard down.",
-        "How you get competitive when I say \"I love you more\" - I love a little out of character breaks.",
-        "The way you always want to open the door no matter what - You make me feel so taken care of.",
-        "Your patience with people and things you love - I hope our baby gets that from you someday.",
-        "Your high emotional intelligence - I gotta say I'm proud I got a man like that!",
-        "The way you're a gentle giant - Your gentleness is louder than you are.",
-        "Lastly, I love that you are mine! - You're a part of my world that brings me comfort.",
-        "Thank God for your life. Spend more birthdays with me, my baby. I love you! ❤️"
+    const slides = [
+        "Happy 26th birthday, my love!",
+        "Sometimes I envy how the world knew you first before I did. How you spent your first two decades and a half oblivious of a woman in the distant future celebrating your life and sulking at the same time having to spend such special day at work...But enough about me!",
+        "It's your 26th birthday, so here are 26 things I loooove about you:",
+        "1. Your snaggletooth smile - When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!",
+        "2. Your big pout - Whether it's a video call or in the flesh, your big pout is a real charmer! I always think about kissing them!",
+        "3. Your bedhead - When you just got up and your hair is sticking in every direction with your eyes still trying to get used to light! You're so cutee my baby",
+        "4. When you do your little dance routine - The bang, the boogey, and the boobie! Your signature dance! You look so goofy when you do it. I love it!",
+        "5. The way you call me 'Bebe' when you're worried - Your tone, your eyes, your body language, everything reaches out to me!",
+        "6. The way you call me babe out loud - 'Baby' makes me feel soft. But when you call me 'babe' out loud, somehow I feel like I'm blushing internally hehe.",
+        "7. The way you take care of your skin - I love that you take good care of your skin with skin care. I hope you could stick with using lip masks though hehe!",
+        "8. The way your hand always looks for me - No matter where we are, your hands always make sure you got me.",
+        "9. Speaking of hands - The way you lick the back of my hand sneakily - I don't know how this got here, but I would probably think something is wrong if you did not do this outside in a day.",
+        "10. The way you initiate to kiss - When you lean slow, smiling a little. You perfected this love-story move!",
+        "11. Talking about kisses - I love when you shower me with smoochy kisses! Even when it gets ticklish!",
+        "12. The way you squeeze your eyes when you laugh so hard - You're totally a baby! My baby!",
+        "13. The tight hugs before you go - It's always sad when you go. And so the tight hugs get extra necessary.",
+        "14. Your big sneaky hands - [Censored]",
+        "15. Your little bilins - When I go outside alone, your little bilins make me feel so taken care of. (Just don't go overboard >_<)",
+        "16. The way you started taking pictures of our food before we eat on your own - I forget this most of the time now, but you still take time to take pictures or ask me if I would take pictures. You're so thoughtful.",
+        "17. The way you take on my challenge when I put vegetables on your plate - You don't have the best reaction everytime, but I love that you take on the challenge anyway!",
+        "18. Your smoochy videos - I love when you send me videos kissing the screen hahahahahahahahaha it's really cute and the perspective makes your pout look bigger!",
+        "19. The way you care for Katchan - Despite how stingy Katchan is, I love that you always look out for him. You're really his long lost dad!",
+        "20. The way we welcome each other with hugs/kisses when we meet before your shifts - It's not a big gesture but it feels so warm and cozy. I can finally put my guard down.",
+        "21. How you get competitive when I say 'I love you more' - It's really funny because you're not really competitive when it comes to me but that changes when I say 'I love you more' and 'I miss you more.' I love a little out of character breaks.",
+        "22. The way you always want to open the door no matter what - Even when carrying bags with both hands, you always make sure to open the door for me. You make me feel so taken care of. (But let me help for real if you can't hehe.)",
+        "23. Your patience with people and things you love - I tell you time and time again that this is something you have inspired me with, and it's still true. I hope our baby gets that from you someday.",
+        "24. Your high emotional intelligence - This shows in the way you treat and communicate with everyone. I gotta say I'm proud I got a man like that!",
+        "25. The way you're a gentle giant - You're big. () But your gentleness is louder than you are. It shows in your tone, your pace, your words, your movement - I love that despite life, your gentleness endured.",
+        "26. Lastly, I love that you are mine! Not in a way that owns you, rather, in the way a song resonates so hard or a quiet sunset belongs to someone . You're a part of my world that brings me comfort, a safe corner where I can genuinely be myself, and a presence that just makes my days better.",
+        "Thank God for your life.",
+        "I could name more things I love about you. But maybe pag 50th birthday mo na ulit hehe. Spend more birthdays with me, my baby. I love you! ❤️"
     ];
 
     const deck = document.getElementById('deck');
-    content.forEach((item, i) => {
+    slides.forEach((text, i) => {
         const slide = document.createElement('div');
         slide.className = `slide ${i === 0 ? 'active' : ''}`;
+        const isLast = i === slides.length - 1;
         slide.innerHTML = `
-            <h1>${i === 0 ? 'Surprise!' : 'Reason #' + i}</h1>
-            <p>${typeof item === 'string' ? item : item.text}</p>
+            <h1>Slide ${i + 1}</h1>
+            <p style="font-size: 1.1rem; line-height: 1.5;">${text}</p>
             <div class="arrow-nav">
                 <button class="btn" onclick="nav(-1)" ${i===0?'style="visibility:hidden"':''}>⬅️ Back</button>
-                <button class="btn" onclick="nav(1)">${i === content.length-1 ? 'Done' : 'Next ➡️'}</button>
+                <button class="btn" onclick="${isLast ? 'location.reload()' : 'nav(1)'}">${isLast ? 'Restart 🔄' : 'Next ➡️'}</button>
             </div>
         `;
         deck.appendChild(slide);
@@ -73,11 +77,11 @@
 
     let idx = 0;
     function nav(dir) {
-        const slides = document.querySelectorAll('.slide');
-        slides[idx].classList.remove('active');
+        const els = document.querySelectorAll('.slide');
+        els[idx].classList.remove('active');
         idx += dir;
-        slides[idx].classList.add('active');
-        if (dir > 0) confetti({ particleCount: 50, origin: { y: 0.8 } });
+        els[idx].classList.add('active');
+        if (dir > 0) confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
     }
 </script>
 </body>
