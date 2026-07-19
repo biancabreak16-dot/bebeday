@@ -1,110 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Happy 26th Birthday!</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root { --pink: #ffb7c5; --dark-pink: #d63384; --white: #ffffff; }
-        body { 
-            margin: 0; background: linear-gradient(135deg, #ffdee9, #b5fffc); 
-            font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; 
-            align-items: center; height: 100vh; overflow: hidden; 
-        }
-        .container { 
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 30px; border: 2px solid var(--white);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
-            max-width: 500px; width: 90%; transition: 0.5s;
-        }
-        h1 { color: var(--dark-pink); font-size: 2rem; }
-        button { 
-            background: var(--dark-pink); color: white; border: none;
-            padding: 15px 25px; border-radius: 15px; cursor: pointer;
-            font-weight: bold; margin-top: 20px; transition: 0.3s;
-        }
-        button:hover { transform: translateY(-5px); background: #ff4d79; }
-        .hidden { display: none; }
-        #slide-text { font-size: 1.2rem; min-height: 100px; margin: 20px 0; color: #555; }
-        .counter { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy 26th Birthday, My Love 🎀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-blush:#ffeef4;
+    --pink-petal:#ffd3e0;
+    --pink-hot:#ff6fa0;
+    --pink-deep:#e0457a;
+    --plum:#6e2b47;
+    --gold:#ffd27a;
+    --glass:rgba(255,255,255,0.55);
+    --glass-strong:rgba(255,255,255,0.75);
+    --glass-border:rgba(255,255,255,0.85);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    overflow:hidden;
+    font-family:'Quicksand', sans-serif;
+    background: radial-gradient(circle at 20% 15%, #fff5f8 0%, #ffd9e6 45%, #ffbcd4 100%);
+    color:var(--plum);
+  }
+
+  #confetti-layer{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+  }
+
+  .confetti-piece{
+    position:absolute;
+    top:-5vh;
+    border-radius:2px;
+    opacity:0.9;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+
+  @keyframes fall{
+    0%{ transform: translateY(0) translateX(0) rotate(0deg); }
+    100%{ transform: translateY(112vh) translateX(var(--drift,20px)) rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .confetti-piece{ animation: none; opacity:0.5; }
+  }
+
+  #stage{
+    position:relative;
+    z-index:2;
+    height:100%;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:28px 20px;
+    text-align:center;
+  }
+
+  .screen.active{
+    display:flex;
+    animation: floatIn 0.55s cubic-bezier(.2,.9,.3,1.1);
+  }
+
+  @keyframes floatIn{
+    0%{ opacity:0; transform: translateY(18px) scale(.98); }
+    100%{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .card{
+    max-width:460px;
+    width:100%;
+    background: var(--glass);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border:1px solid var(--glass-border);
+    border-radius:32px;
+    padding:38px 30px 34px;
+    box-shadow: 0 20px 45px rgba(224,69,122,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+    position:relative;
+  }
+
+  .eyebrow{
+    font-family:'Fredoka', sans-serif;
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--pink-deep);
+    opacity:0.85;
+    margin:0 0 10px;
+  }
+
+  h1{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:clamp(26px,6vw,36px);
+    line-height:1.25;
+    margin:0 0 14px;
+    color:var(--plum);
+  }
+
+  h1 .heart{ color:var(--pink-hot); }
+
+  p{
+    font-size:16px;
+    line-height:1.6;
+    margin:0 0 8px;
+    color:#7a3a55;
+  }
+
+  .icon-badge{
+    width:64px;
+    height:64px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    background: linear-gradient(160deg, var(--glass-strong), rgba(255,255,255,0.3));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    border:1px solid var(--glass-border);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.9), 0 6px 14px rgba(224,69,122,0.15);
+  }
+
+  /* ---- iPhone-glass button ---- */
+  .btn{
+    appearance:none;
+    border:1px solid rgba(255,255,255,0.9);
+    outline:none;
+    cursor:pointer;
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:15.5px;
+    color:var(--plum);
+    padding:15px 26px;
+    border-radius:20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.45));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.95) inset,
+      0 10px 22px rgba(224,69,122,0.22),
+      0 1px 3px rgba(224,69,122,0.15);
+    position:relative;
+    overflow:hidden;
+    transition: transform .12s ease, box-shadow .12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn::before{
+    content:"";
+    position:absolute;
+    top:0; left:-30%;
+    width:40%; height:100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.75), rgba(255,255,255,0) 70%);
+    transform: skewX(-18deg);
+    transition: left .5s ease;
+  }
+
+  .btn:hover::before{ left:120%; }
+
+  .btn:active{
+    transform: scale(0.955) translateY(2px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.7) inset,
+      0 4px 10px rgba(224,69,122,0.22);
+  }
+
+  .btn-primary{
+    background: linear-gradient(180deg, #ffb1cc, var(--pink-hot));
+    color:#fff;
+    border-color: rgba(255,255,255,0.7);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 12px 24px rgba(224,69,122,0.38);
+  }
+
+  .btn-primary:active{
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.4) inset,
+      0 5px 12px rgba(224,69,122,0.38);
+  }
+
+  .btn-ghost{
+    background: rgba(255,255,255,0.35);
+    font-size:14px;
+    padding:11px 20px;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+
+  /* Landing */
+  #screen-landing h1{ font-size:clamp(28px,7vw,40px); }
+  .balloons{ font-size:30px; margin-bottom:6px; letter-spacing:6px; }
+
+  /* Gift screen */
+  .gift-box{
+    font-size:78px;
+    margin-bottom:6px;
+    transition: transform .35s cubic-bezier(.2,.8,.3,1.3);
+    display:inline-block;
+  }
+  .gift-box.shake{ animation: shake 0.5s; }
+  @keyframes shake{
+    0%,100%{ transform: rotate(0deg); }
+    20%{ transform: rotate(-8deg); }
+    40%{ transform: rotate(7deg); }
+    60%{ transform: rotate(-5deg); }
+    80%{ transform: rotate(4deg); }
+  }
+
+  /* Item slides */
+  .progress{
+    font-family:'Fredoka', sans-serif;
+    font-size:13px;
+    letter-spacing:1px;
+    color:var(--pink-deep);
+    margin-bottom:6px;
+    opacity:0.9;
+  }
+  .progress-track{
+    width:100%;
+    height:5px;
+    background: rgba(255,255,255,0.5);
+    border-radius:6px;
+    overflow:hidden;
+    margin:8px 0 18px;
+  }
+  .progress-fill{
+    height:100%;
+    background: linear-gradient(90deg, var(--pink-hot), var(--gold));
+    border-radius:6px;
+    transition: width .4s ease;
+  }
+
+  .item-number{
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+    background: var(--pink-hot);
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:14px;
+    margin-bottom:12px;
+    box-shadow: 0 4px 10px rgba(224,69,122,0.35);
+  }
+
+  .item-title{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:20px;
+    margin: 4px 0 10px;
+    color:var(--plum);
+  }
+
+  .item-text{
+    font-size:15.5px;
+    line-height:1.65;
+    color:#7a3a55;
+  }
+
+  .censored-wrap{
+    display:inline-block;
+    position:relative;
+    border-radius:8px;
+    padding:2px 8px;
+    background: var(--plum);
+    color: var(--plum);
+    letter-spacing:1px;
+    user-select:none;
+    transition: all .3s ease;
+  }
+  .censored-wrap.revealed{
+    background: rgba(255, 214, 232, 0.6);
+    color: var(--pink-deep);
+    font-weight:600;
+  }
+
+  .float-emoji{
+    position:absolute;
+    font-size:20px;
+    opacity:0.55;
+    animation: bob 3.4s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-10px) rotate(8deg); }
+  }
+
+  .tap-hint{
+    font-size:12.5px;
+    color:var(--pink-deep);
+    opacity:0.7;
+    margin-top:14px;
+  }
+
+  .final-hearts{ font-size:34px; margin-top:6px; letter-spacing:6px; }
+
+</style>
 </head>
 <body>
 
-<div id="app" class="container">
-    <div id="intro">
-        <h1>Happy 26th Birthday, my love!</h1>
-        <button onclick="startApp()">Click to unwrap your surprise!</button>
-    </div>
+<div id="confetti-layer"></div>
 
-    <div id="slides" class="hidden">
-        <div class="counter" id="counter">1 / 28</div>
-        <div id="slide-text"></div>
-        <button id="nextBtn" onclick="nextSlide()">Next ➔</button>
+<div id="stage">
+
+  <!-- LANDING -->
+  <div class="screen active" id="screen-landing">
+    <div class="card">
+      <div class="balloons">🎈🎀🎈</div>
+      <p class="eyebrow">A little something for you</p>
+      <h1>Happy 26th birthday,<br>my love! <span class="heart">💗</span></h1>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="goTo('screen-gift')">Open ✨</button>
+      </div>
     </div>
+  </div>
+
+  <!-- GIFT -->
+  <div class="screen" id="screen-gift">
+    <div class="card">
+      <div class="gift-box" id="giftBox">🎁</div>
+      <p class="eyebrow">psst...</p>
+      <h1 style="font-size:22px;">I got a surprise for you.<br>Click here to unwrap!</h1>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="unwrapBtn" onclick="unwrapGift()">Unwrap 🎀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO MESSAGE -->
+  <div class="screen" id="screen-intro">
+    <div class="card">
+      <div class="icon-badge">🥹</div>
+      <p>Sometimes I envy how the world knew you first before I did. How you spent your first two decades and a half oblivious of a woman in the distant future celebrating your life and sulking at the same time having to spend such a special day at work...</p>
+      <p style="margin-top:14px;">But enough about me!</p>
+      <h1 style="font-size:22px; margin-top:14px;">It's your 26th birthday, so here are 26 things I loooove about you:</h1>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="startItems()">Let's go 💌</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITEM SLIDE (dynamic) -->
+  <div class="screen" id="screen-item">
+    <div class="card">
+      <div class="progress" id="itemProgressLabel">1 / 26</div>
+      <div class="progress-track"><div class="progress-fill" id="itemProgressFill" style="width:3.8%;"></div></div>
+      <div class="icon-badge" id="itemIcon">😁</div>
+      <div class="item-number" id="itemNumber">#1</div>
+      <div class="item-title" id="itemTitle"></div>
+      <div class="item-text" id="itemText"></div>
+      <div id="itemExtra"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="backBtn" onclick="prevItem()">← Back</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextItem()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THANK GOD -->
+  <div class="screen" id="screen-thankgod">
+    <div class="card">
+      <div class="icon-badge">🙏</div>
+      <h1>Thank God for your life.</h1>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="goTo('screen-final')">Continue 💗</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="screen" id="screen-final">
+    <div class="card">
+      <div class="icon-badge">💌</div>
+      <p>I could name more things I love about you. But maybe pag 50th birthday mo na ulit hehe.</p>
+      <h1 style="font-size:22px; margin-top:14px;">Spend more birthdays with me, my baby. I love you!</h1>
+      <div class="final-hearts">💗💕💗</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goTo('screen-landing'); resetItems();">Replay ↺</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-    const content = [
-        "Sometimes I envy how the world knew you first before I did. How you spent your first two decades and a half oblivious of a woman in the distant future celebrating your life and sulking at the same time having to spend such special day at work... But enough about me!",
-        "It's your 26th birthday, so here are 26 things I loooove about you:",
-        "1. Your snaggletooth smile - When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!",
-        "2. Your big pout - Whether it's a video call or in the flesh, your big pout is a real charmer! I always think about kissing them!",
-        "3. Your bedhead - When you just got up and your hair is sticking in every direction!",
-        "4. When you do your little dance routine - The bang, the boogey, and the boobie!",
-        "5. The way you call me 'Bebe' when you're worried.",
-        "6. The way you call me 'babe' out loud - It makes me feel like I'm blushing internally hehe.",
-        "7. The way you take care of your skin - I hope you could stick with using lip masks though hehe!",
-        "8. The way your hand always looks for me - No matter where we are, your hands always make sure you got me.",
-        "9. The way you lick the back of my hand sneakily - I'd think something was wrong if you didn't do this!",
-        "10. The way you initiate to kiss - You perfected this love-story move!",
-        "11. Showering me with smoochy kisses - Even when it gets ticklish!",
-        "12. The way you squeeze your eyes when you laugh so hard - You're totally my baby!",
-        "13. The tight hugs before you go - The tight hugs get extra necessary.",
-        "14. Your big sneaky hands - <button onclick=\"alert('Secret: Keep them to yourself! >_<')\">Reveal Secret</button>",
-        "15. Your little bilins - It makes me feel so taken care of.",
-        "16. The way you take pictures of our food - You're so thoughtful.",
-        "17. Your reaction when I put vegetables on your plate - I love that you take on the challenge!",
-        "18. Your smoochy videos - They make your pout look even bigger!",
-        "19. The way you care for Katchan - You're his long lost dad!",
-        "20. Our warm welcome hugs and kisses before your shifts.",
-        "21. How you get competitive when I say 'I love you more' - I love those out of character breaks!",
-        "22. The way you always want to open the door no matter what.",
-        "23. Your patience with people and things you love - I hope our baby gets that from you someday.",
-        "24. Your high emotional intelligence - I'm proud I got a man like that!",
-        "25. The way you're a gentle giant - Your gentleness is louder than you are.",
-        "26. Lastly, I love that you are mine! You're my safe corner.",
-        "Thank God for your life.",
-        "I could name more, but maybe when you're 50! Spend more birthdays with me, my baby. I love you!"
-    ];
+  /* ---------------- Confetti ---------------- */
+  const confettiLayer = document.getElementById('confetti-layer');
+  const confettiColors = ['#ff8fb3', '#ffd27a', '#ffffff', '#ffb1cc', '#e0457a'];
+  const CONFETTI_COUNT = 46;
 
-    let step = 0;
+  function spawnConfetti(){
+    for(let i=0;i<CONFETTI_COUNT;i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      const size = 6 + Math.random()*7;
+      const isCircle = Math.random() > 0.5;
+      piece.style.width = size + 'px';
+      piece.style.height = (isCircle ? size : size*1.6) + 'px';
+      piece.style.left = Math.random()*100 + 'vw';
+      piece.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      if(isCircle) piece.style.borderRadius = '50%';
+      const duration = 6 + Math.random()*6;
+      const delay = Math.random()*10;
+      const drift = (Math.random()*80 - 40) + 'px';
+      piece.style.setProperty('--drift', drift);
+      piece.style.animationDuration = duration + 's';
+      piece.style.animationDelay = '-' + delay + 's';
+      confettiLayer.appendChild(piece);
+    }
+  }
+  spawnConfetti();
 
-    function startApp() {
-        document.getElementById('intro').classList.add('hidden');
-        document.getElementById('slides').classList.remove('hidden');
-        
-        // Continuous confetti
-        setInterval(() => {
-            confetti({ particleCount: 3, spread: 100, origin: { y: 0.1 } });
-        }, 800);
-        
-        updateSlide();
+  /* ---------------- Navigation ---------------- */
+  function goTo(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function unwrapGift(){
+    const box = document.getElementById('giftBox');
+    box.classList.add('shake');
+    setTimeout(() => {
+      box.textContent = '💝';
+      setTimeout(() => goTo('screen-intro'), 450);
+    }, 500);
+  }
+
+  /* ---------------- Items data ---------------- */
+  const items = [
+    { icon:'😁', title:'Your snaggletooth smile', text:'When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!' },
+    { icon:'😗', title:'Your big pout', text:"Whether it's a video call or in the flesh, your big pout is a real charmer! I always think about kissing them!" },
+    { icon:'🛏️', title:'Your bedhead', text:"When you just got up and your hair is sticking in every direction with your eyes still trying to get used to light! You're so cutee my baby." },
+    { icon:'💃', title:'Your little dance routine', text:'The bang, the boogey, and the boobie! Your signature dance! You look so goofy when you do it. I love it!' },
+    { icon:'🥺', title:'The way you call me "Bebe" when you\'re worried', text:'Your tone, your eyes, your body language, everything reaches out to me!' },
+    { icon:'😳', title:'The way you call me babe out loud', text:'"Baby" makes me feel soft. But when you call me "babe" out loud, somehow I feel like I\'m blushing internally hehe.' },
+    { icon:'🧴', title:'The way you take care of your skin', text:'I love that you take good care of your skin with skin care. I hope you could stick with using lip masks though hehe!' },
+    { icon:'🤝', title:'The way your hand always looks for me', text:'No matter where we are, your hands always make sure you got me.' },
+    { icon:'🫳', title:'Speaking of hands', text:"The way you lick the back of my hand sneakily - I don't know how this got here, but I would probably think something is wrong if you did not do this outside in a day." },
+    { icon:'😘', title:'The way you initiate to kiss', text:'When you lean slow, smiling a little. You perfected this love-story move!' },
+    { icon:'💋', title:'Talking about kisses', text:'I love when you shower me with smoochy kisses! Even when it gets ticklish!' },
+    { icon:'😆', title:'The way you squeeze your eyes when you laugh so hard', text:"You're totally a baby! My baby!" },
+    { icon:'🤗', title:'The tight hugs before you go', text:"It's always sad when you go. And so the tight hugs gets extra necessary." },
+    { icon:'🙈', title:'Your big sneaky hands', censored:true },
+    { icon:'🚶‍♀️', title:'Your little bilins', text:"When I go outside alone, your little bilins make me feel so taken care of. (Just don't go overboard >_<)" },
+    { icon:'📸', title:'The way you started taking pictures of our food', text:'I forget this most of the time now, but you still take time to take pictures or ask me if I would take pictures. You\'re so thoughtful.' },
+    { icon:'🥦', title:'The way you take on my veggie challenge', text:"You don't have the best reaction everytime, but I love that you take on the challenge anyway!" },
+    { icon:'📹', title:'Your smoochy videos', text:"I love when you send me videos kissing the screen hahahahahahahahaha it's really cute and the perspective makes your pout look bigger!" },
+    { icon:'🐱', title:'The way you care for Katchan', text:"Despite how stingy Katchan is, I love that you always look out for him. You're really his long lost dad!" },
+    { icon:'🤍', title:'The way we welcome each other before your shifts', text:"It's not a big gesture but it feels so warm and cozy. I can finally put my guard down." },
+    { icon:'🏆', title:'How you get competitive when I say "I love you more"', text:"It's really funny because you're not really competitive when it comes to me but that changes when I say \"I love you more\" and \"I miss you more.\" I love a little out of character breaks." },
+    { icon:'🚪', title:'The way you always want to open the door', text:"Even when carrying bags with both hands, you always make sure to open the door for me. You make me feel so taken care of. (But let me help for real if you can't hehe.)" },
+    { icon:'🧘‍♂️', title:'Your patience with people and things you love', text:"I tell you time and time again that this is something you have inspired me with, and it's still true. I hope our baby gets that from you someday." },
+    { icon:'🧠', title:'Your high emotional intelligence', text:"This shows in the way you treat and communicate with everyone. I gotta say I'm proud I got a man like that!" },
+    { icon:'🦒', title:"You're a gentle giant", text:"You're big. But your gentleness is louder than you are. It shows in your tone, your pace, your words, your movement - I love that despite life, your gentleness endured." },
+    { icon:'💞', title:'Lastly, I love that you are mine!', text:"Not in a way that owns you, rather, in the way a song resonates so hard or a quiet sunset belongs to someone. You're a part of my world that brings me comfort, a safe corner where I can genuinely be myself, and a presence that just makes my days better." }
+  ];
+
+  let currentItem = 0;
+
+  function renderItem(){
+    const it = items[currentItem];
+    document.getElementById('itemProgressLabel').textContent = (currentItem+1) + ' / ' + items.length;
+    document.getElementById('itemProgressFill').style.width = ((currentItem+1)/items.length*100) + '%';
+    document.getElementById('itemIcon').textContent = it.icon;
+    document.getElementById('itemNumber').textContent = '#' + (currentItem+1);
+    document.getElementById('itemTitle').textContent = it.title;
+
+    const extraEl = document.getElementById('itemExtra');
+    const textEl = document.getElementById('itemText');
+
+    if(it.censored){
+      textEl.innerHTML = 'That\'s a secret just for you: <span class="censored-wrap" id="censoredSpan">████████</span>';
+      extraEl.innerHTML = '<div class="btn-row"><button class="btn btn-ghost" onclick="revealCensored()">🙈 Peek?</button></div>';
+    } else {
+      textEl.textContent = it.text;
+      extraEl.innerHTML = '';
     }
 
-    function updateSlide() {
-        document.getElementById('slide-text').innerHTML = content[step];
-        document.getElementById('counter').innerText = `${step + 1} / ${content.length}`;
-    }
+    document.getElementById('backBtn').style.visibility = currentItem === 0 ? 'hidden' : 'visible';
+    document.getElementById('nextBtn').textContent = currentItem === items.length - 1 ? 'Almost there →' : 'Next →';
 
-    function nextSlide() {
-        if (step < content.length - 1) {
-            step++;
-            updateSlide();
-        } else {
-            document.getElementById('slides').innerHTML = "<h1>Happy Birthday! 🎉</h1><p>I love you forever.</p>";
-        }
+    goTo('screen-item');
+  }
+
+  function revealCensored(){
+    const span = document.getElementById('censoredSpan');
+    if(!span) return;
+    if(span.classList.contains('revealed')){
+      span.classList.remove('revealed');
+      span.textContent = '████████';
+    } else {
+      span.classList.add('revealed');
+      span.textContent = "that stays between us 😉";
     }
+  }
+
+  function startItems(){
+    currentItem = 0;
+    renderItem();
+  }
+
+  function nextItem(){
+    if(currentItem < items.length - 1){
+      currentItem++;
+      renderItem();
+    } else {
+      goTo('screen-thankgod');
+    }
+  }
+
+  function prevItem(){
+    if(currentItem > 0){
+      currentItem--;
+      renderItem();
+    }
+  }
+
+  function resetItems(){
+    currentItem = 0;
+  }
 </script>
+
 </body>
 </html>
