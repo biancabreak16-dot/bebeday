@@ -2,83 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Happy 26th Birthday!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { background: #ffe6f0; font-family: 'Arial', sans-serif; text-align: center; color: #d63384; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        :root { --pink: #ffb7c5; --dark-pink: #d63384; --white: #ffffff; }
+        body { 
+            margin: 0; background: linear-gradient(135deg, #ffdee9, #b5fffc); 
+            font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; 
+            align-items: center; height: 100vh; overflow: hidden; 
+        }
+        .container { 
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 30px; border: 2px solid var(--white);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+            max-width: 500px; width: 90%; transition: 0.5s;
+        }
+        h1 { color: var(--dark-pink); font-size: 2rem; }
+        button { 
+            background: var(--dark-pink); color: white; border: none;
+            padding: 15px 25px; border-radius: 15px; cursor: pointer;
+            font-weight: bold; margin-top: 20px; transition: 0.3s;
+        }
+        button:hover { transform: translateY(-5px); background: #ff4d79; }
         .hidden { display: none; }
-        .card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-width: 80%; }
-        button { background: #ff85a2; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; font-size: 18px; margin-top: 20px; transition: 0.3s; }
-        button:hover { background: #ff4d79; transform: scale(1.05); }
-        .secret-btn { background: #a2d2ff; }
+        #slide-text { font-size: 1.2rem; min-height: 100px; margin: 20px 0; color: #555; }
+        .counter { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div id="screen1">
-    <h1>Happy 26th birthday, my love!</h1>
-    <button onclick="startGift()">I got a surprise for you. Click here to unwrap!</button>
-</div>
+<div id="app" class="container">
+    <div id="intro">
+        <h1>Happy 26th Birthday, my love!</h1>
+        <button onclick="startApp()">Click to unwrap your surprise!</button>
+    </div>
 
-<div id="screen2" class="hidden">
-    <div class="card">
-        <p id="content">Loading...</p>
+    <div id="slides" class="hidden">
+        <div class="counter" id="counter">1 / 28</div>
+        <div id="slide-text"></div>
         <button id="nextBtn" onclick="nextSlide()">Next ➔</button>
     </div>
 </div>
 
 <script>
-    const slides = [
-        "Sometimes I envy how the world knew you first before I did. But enough about me! It's your 26th birthday, so here are 26 things I loooove about you:",
+    const content = [
+        "Sometimes I envy how the world knew you first before I did. How you spent your first two decades and a half oblivious of a woman in the distant future celebrating your life and sulking at the same time having to spend such special day at work... But enough about me!",
+        "It's your 26th birthday, so here are 26 things I loooove about you:",
         "1. Your snaggletooth smile - When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!",
         "2. Your big pout - Whether it's a video call or in the flesh, your big pout is a real charmer! I always think about kissing them!",
         "3. Your bedhead - When you just got up and your hair is sticking in every direction!",
         "4. When you do your little dance routine - The bang, the boogey, and the boobie!",
         "5. The way you call me 'Bebe' when you're worried.",
-        "6. The way you call me 'babe' out loud - It makes me blush internally hehe.",
-        "7. The way you take care of your skin - I hope you stick with using lip masks though hehe!",
-        "8. The way your hand always looks for me - You always make sure you got me.",
-        "9. The way you lick the back of my hand sneakily - I'd think something was wrong if you didn't!",
+        "6. The way you call me 'babe' out loud - It makes me feel like I'm blushing internally hehe.",
+        "7. The way you take care of your skin - I hope you could stick with using lip masks though hehe!",
+        "8. The way your hand always looks for me - No matter where we are, your hands always make sure you got me.",
+        "9. The way you lick the back of my hand sneakily - I'd think something was wrong if you didn't do this!",
         "10. The way you initiate to kiss - You perfected this love-story move!",
         "11. Showering me with smoochy kisses - Even when it gets ticklish!",
         "12. The way you squeeze your eyes when you laugh so hard - You're totally my baby!",
-        "13. The tight hugs before you go - They are so necessary.",
-        "14. Your big sneaky hands - <button class='secret-btn' onclick='alert(\"Censored! You know what this is! >//<\")'>Click to reveal</button>",
+        "13. The tight hugs before you go - The tight hugs get extra necessary.",
+        "14. Your big sneaky hands - <button onclick=\"alert('Secret: Keep them to yourself! >_<')\">Reveal Secret</button>",
         "15. Your little bilins - It makes me feel so taken care of.",
-        "16. You taking pictures of our food - You're so thoughtful.",
-        "17. The way you take on my vegetable challenges - I love that you try even if you don't like them!",
+        "16. The way you take pictures of our food - You're so thoughtful.",
+        "17. Your reaction when I put vegetables on your plate - I love that you take on the challenge!",
         "18. Your smoochy videos - They make your pout look even bigger!",
-        "19. The way you care for Katchan - You're really his long lost dad!",
+        "19. The way you care for Katchan - You're his long lost dad!",
         "20. Our warm welcome hugs and kisses before your shifts.",
-        "21. How you get competitive when I say 'I love you more' - I love your out of character breaks!",
+        "21. How you get competitive when I say 'I love you more' - I love those out of character breaks!",
         "22. The way you always want to open the door no matter what.",
-        "23. Your patience - Something you've inspired me with. I hope our baby gets that from you.",
-        "24. Your high emotional intelligence - I'm so proud of the man you are.",
+        "23. Your patience with people and things you love - I hope our baby gets that from you someday.",
+        "24. Your high emotional intelligence - I'm proud I got a man like that!",
         "25. The way you're a gentle giant - Your gentleness is louder than you are.",
         "26. Lastly, I love that you are mine! You're my safe corner.",
         "Thank God for your life.",
         "I could name more, but maybe when you're 50! Spend more birthdays with me, my baby. I love you!"
     ];
 
-    let current = 0;
-    function startGift() {
-        document.getElementById('screen1').classList.add('hidden');
-        document.getElementById('screen2').classList.remove('hidden');
-        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-        updateContent();
+    let step = 0;
+
+    function startApp() {
+        document.getElementById('intro').classList.add('hidden');
+        document.getElementById('slides').classList.remove('hidden');
+        
+        // Continuous confetti
+        setInterval(() => {
+            confetti({ particleCount: 3, spread: 100, origin: { y: 0.1 } });
+        }, 800);
+        
+        updateSlide();
     }
+
+    function updateSlide() {
+        document.getElementById('slide-text').innerHTML = content[step];
+        document.getElementById('counter').innerText = `${step + 1} / ${content.length}`;
+    }
+
     function nextSlide() {
-        if (current < slides.length - 1) {
-            current++;
-            updateContent();
+        if (step < content.length - 1) {
+            step++;
+            updateSlide();
         } else {
-            document.getElementById('content').innerHTML = "<b>Happy Birthday again! I love you!</b>";
-            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('slides').innerHTML = "<h1>Happy Birthday! 🎉</h1><p>I love you forever.</p>";
         }
-    }
-    function updateContent() {
-        document.getElementById('content').innerHTML = slides[current];
     }
 </script>
 </body>
