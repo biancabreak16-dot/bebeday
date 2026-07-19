@@ -3,150 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 26th Birthday, My Love! 💖</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Caveat:wght@700&family=Nunito:wght@400;600;700&family=Playpen+Sans:wght@400;700&display=swap" rel="stylesheet">
-    
+    <title>Happy Birthday!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --blush-100: #FFF5F5; --blush-200: #FFE4E6; --blush-300: #FECDD3; --blush-500: #FB7185; --blush-600: #E11D48; }
-        body { font-family: 'Nunito', sans-serif; background-color: var(--blush-100); overflow-x: hidden; margin: 0; padding: 0; min-height: 100vh; }
-        .title-font { font-family: 'Comfortaa', cursive; }
-        .handwritten { font-family: 'Caveat', cursive; }
-        .cozy-font { font-family: 'Playpen Sans', sans-serif; }
-        #canvas-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .slide-active { display: flex !important; }
-        .glow-pulse { animation: pulseEffect 2s infinite; }
-        @keyframes pulseEffect { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
-        .wobble-hover:hover { animation: wobble 0.5s ease-in-out infinite alternate; }
-        @keyframes wobble { 0% { transform: rotate(-3deg); } 100% { transform: rotate(3deg); } }
-        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        body { background: #ffe6f0; font-family: 'Arial', sans-serif; text-align: center; color: #d63384; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .hidden { display: none; }
+        .card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-width: 80%; }
+        button { background: #ff85a2; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; font-size: 18px; margin-top: 20px; transition: 0.3s; }
+        button:hover { background: #ff4d79; transform: scale(1.05); }
+        .secret-btn { background: #a2d2ff; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-height-screen p-4 md:p-8 select-none">
+<body>
 
-    <canvas id="canvas-backdrop"></canvas>
-    <canvas id="confetti-canvas"></canvas>
+<div id="screen1">
+    <h1>Happy 26th birthday, my love!</h1>
+    <button onclick="startGift()">I got a surprise for you. Click here to unwrap!</button>
+</div>
 
-    <main class="w-full max-w-4xl min-h-[600px] flex items-center justify-center z-10">
-        <section id="view-creator" class="w-full bg-white rounded-3xl shadow-2xl p-6 md:p-10 border-4 border-rose-300 text-center flex flex-col items-center justify-center space-y-6">
-            <h1 class="title-font text-3xl md:text-4xl font-bold text-rose-700">Birthday QR Website</h1>
-            <p class="text-gray-600 font-semibold max-w-md">
-                I've crafted a sweet, private birthday slide-deck containing <span class="text-rose-600 font-bold">26 beautiful reasons</span> why you love him. Scan the QR code below to open the envelope!
-            </p>
-            <div class="bg-rose-50 p-6 rounded-2xl border-2 border-dashed border-rose-300 flex flex-col items-center shadow-inner relative group">
-                <img id="qr-code-img" src="" alt="Dynamic QR Code" class="w-48 h-48 md:w-56 md:h-56 bg-white p-2 rounded-xl shadow-md border border-rose-200" />
-            </div>
-            <button onclick="simulateScan()" class="glow-pulse bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-all transform hover:scale-105 flex items-center justify-center gap-2 text-lg">
-                <i class="fa-solid fa-heart-circle-check animate-pulse"></i> Open Envelope Directly
-            </button>
-        </section>
+<div id="screen2" class="hidden">
+    <div class="card">
+        <p id="content">Loading...</p>
+        <button id="nextBtn" onclick="nextSlide()">Next ➔</button>
+    </div>
+</div>
 
-        <section id="view-welcome" class="hidden w-full bg-white rounded-3xl shadow-2xl p-6 md:p-10 border-4 border-rose-300 text-center flex flex-col items-center justify-center space-y-6">
-            <h1 class="title-font text-4xl md:text-5xl font-bold text-rose-700 animate-pulse">Happy Birthday! 🎉</h1>
-            <div class="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border-4 border-rose-100 shadow-md flex items-center justify-center bg-rose-50">
-                <img src="https://media.giphy.com/media/JZD0lzXscgAlIu6UUs/giphy.gif" alt="Cute Birthday Cat" class="w-full h-full object-cover">
-            </div>
-            <p class="text-lg md:text-xl text-rose-900 font-semibold cozy-font">Ready for your surprise? 🧸</p>
-            <button onclick="transitionToSlides()" class="glow-pulse bg-rose-600 hover:bg-rose-700 text-white font-bold text-2xl py-5 px-14 rounded-full shadow-xl transition-all transform active:scale-95 flex items-center gap-3">
-                Yay!! <i class="fa-solid fa-sparkles text-amber-300"></i>
-            </button>
-        </section>
+<script>
+    const slides = [
+        "Sometimes I envy how the world knew you first before I did. But enough about me! It's your 26th birthday, so here are 26 things I loooove about you:",
+        "1. Your snaggletooth smile - When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!",
+        "2. Your big pout - Whether it's a video call or in the flesh, your big pout is a real charmer! I always think about kissing them!",
+        "3. Your bedhead - When you just got up and your hair is sticking in every direction!",
+        "4. When you do your little dance routine - The bang, the boogey, and the boobie!",
+        "5. The way you call me 'Bebe' when you're worried.",
+        "6. The way you call me 'babe' out loud - It makes me blush internally hehe.",
+        "7. The way you take care of your skin - I hope you stick with using lip masks though hehe!",
+        "8. The way your hand always looks for me - You always make sure you got me.",
+        "9. The way you lick the back of my hand sneakily - I'd think something was wrong if you didn't!",
+        "10. The way you initiate to kiss - You perfected this love-story move!",
+        "11. Showering me with smoochy kisses - Even when it gets ticklish!",
+        "12. The way you squeeze your eyes when you laugh so hard - You're totally my baby!",
+        "13. The tight hugs before you go - They are so necessary.",
+        "14. Your big sneaky hands - <button class='secret-btn' onclick='alert(\"Censored! You know what this is! >//<\")'>Click to reveal</button>",
+        "15. Your little bilins - It makes me feel so taken care of.",
+        "16. You taking pictures of our food - You're so thoughtful.",
+        "17. The way you take on my vegetable challenges - I love that you try even if you don't like them!",
+        "18. Your smoochy videos - They make your pout look even bigger!",
+        "19. The way you care for Katchan - You're really his long lost dad!",
+        "20. Our warm welcome hugs and kisses before your shifts.",
+        "21. How you get competitive when I say 'I love you more' - I love your out of character breaks!",
+        "22. The way you always want to open the door no matter what.",
+        "23. Your patience - Something you've inspired me with. I hope our baby gets that from you.",
+        "24. Your high emotional intelligence - I'm so proud of the man you are.",
+        "25. The way you're a gentle giant - Your gentleness is louder than you are.",
+        "26. Lastly, I love that you are mine! You're my safe corner.",
+        "Thank God for your life.",
+        "I could name more, but maybe when you're 50! Spend more birthdays with me, my baby. I love you!"
+    ];
 
-        <section id="view-slides" class="hidden w-full flex-col items-center relative space-y-4">
-            <div class="w-full bg-white/60 backdrop-blur rounded-full h-3 border border-rose-200 overflow-hidden relative shadow-sm">
-                <div id="slide-progress" class="bg-gradient-to-r from-rose-400 to-rose-600 h-full w-[0%] transition-all duration-300"></div>
-            </div>
-            <div class="flex justify-between w-full px-2 text-rose-800 text-sm font-bold tracking-widest uppercase">
-                <span id="slide-label">Overview</span>
-                <span id="slide-counter">0 / 26</span>
-            </div>
-            <div class="w-full bg-white rounded-3xl shadow-2xl border-4 border-rose-300 min-h-[500px] md:min-h-[550px] p-6 md:p-10 flex flex-col justify-between relative overflow-hidden">
-                <div id="slide-box" class="flex-grow flex flex-col justify-center items-center w-full"></div>
-                <div class="flex justify-between items-center w-full pt-4 mt-4 border-t border-rose-100 z-10">
-                    <button onclick="prevSlide()" id="btn-prev" class="bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold py-3 px-6 rounded-full transition transform hover:-translate-x-1 flex items-center gap-2">
-                        <i class="fa-solid fa-arrow-left"></i> Back
-                    </button>
-                    <button onclick="nextSlide()" id="btn-next" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-full transition transform hover:translate-x-1 flex items-center gap-2 shadow-md">
-                        Next <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        const loveReasons = [
-            { number: 1, title: "Your Snaggletooth Smile", desc: "When you smile big, happy little crescents form in your eyes!", icon: "fa-face-laugh-beam", theme: "rose", funFact: "I secretly count the tiny wrinkles next to your eyes." },
-            { number: 2, title: "Your Big Pout", desc: "Your big pout is a real charmer! I always think about kissing them!", icon: "fa-face-pleading", theme: "peach", funFact: "You do this whenever you want snacks." },
-            { number: 3, title: "Your Bedhead", desc: "When you just got up and your hair is sticking in every direction. You're so cutee my baby!", icon: "fa-bed", theme: "lavender", funFact: "You look like a little baby lion." },
-            { number: 4, title: "Your Signature Dance", desc: "The bang, the boogey, and the boobie! Your signature dance! You look so goofy when you do it.", icon: "fa-music", theme: "rose", funFact: "We need to choreograph a duet." },
-            { number: 5, title: "Your Worried Tone", desc: "The way you call me 'Bebe' when you're worried — everything reaches out to me!", icon: "fa-kit-medical", theme: "peach", funFact: "It makes me feel protected." },
-            { number: 6, title: "Low-Profile Chuckle", desc: "Your low-profile chuckle — I have started doing this as well because it saves energy.", icon: "fa-face-laugh-wink", theme: "lavender", funFact: "Mirroring is proof of true love!" },
-            { number: 7, title: "Calling Me 'Babe' Out Loud", desc: "When you call me 'babe' out loud, somehow I feel like I'm blushing internally hehe.", icon: "fa-heart", theme: "rose", funFact: "Instant butterfly flutter." },
-            { number: 8, title: "Skin Care Diligence", desc: "I love that you take good care of your skin with skincare. Stick with those lip masks!", icon: "fa-sparkles", theme: "peach", funFact: "Let me apply your serum tonight!" },
-            { number: 9, title: "Searching Hands", desc: "The way your hand always looks for me — No matter where we are, your hands always make sure you got me.", icon: "fa-hands-holding", theme: "lavender", funFact: "Your fingers have radar." },
-            { number: 10, title: "Sneaky Hand Licks", desc: "The way you lick the back of my hand sneakily. I'd worry if you didn't do this!", icon: "fa-tongue", theme: "rose", funFact: "My hand feels lonely without it." },
-            { number: 11, title: "Perfected Romance Leans", desc: "The way you initiate to kiss — When you lean slow, smiling a little. You perfected this!", icon: "fa-heart-circle-plus", theme: "peach", funFact: "Better than cinema pacing." },
-            { number: 12, title: "Smoochy Shower Attacks", desc: "I love when you shower me with smoochy kisses! Even when it gets ticklish!", icon: "fa-face-kiss-wink-heart", theme: "lavender", funFact: "Best recipe for laughing fits." },
-            { number: 13, title: "Squeezed-Eye Laughs", desc: "The way you squeeze your eyes when you laugh so hard — You're totally a baby!", icon: "fa-baby", theme: "rose", funFact: "The most precious expression ever." },
-            { number: 14, title: "Tight Departure Hugs", desc: "The tight hugs before you go — It's always sad when you leave, so they are extra necessary.", icon: "fa-people-pulling", theme: "peach", funFact: "They recharge my battery." },
-            { number: 15, title: "Your big sneaky hands", desc: "[Censored]", icon: "fa-hand-back-fist", theme: "rose", isCensored: true, funFact: "🙈 Classified information!" },
-            { number: 16, title: "Caring Little 'Bilins'", desc: "Your little bilins — They make me feel so taken care of when I'm outside alone.", icon: "fa-clipboard-list", theme: "lavender", funFact: "You care so deeply about my safety." },
-            { number: 17, title: "Food Photo Initiative", desc: "You take time to take pictures of our food. You're so thoughtful.", icon: "fa-camera-retro", theme: "rose", funFact: "Our relationship's documentarian!" },
-            { number: 18, title: "Veggie Challenges", desc: "The way you take on my challenge when I put vegetables on your plate — I love that you try!", icon: "fa-carrot", theme: "peach", funFact: "Pure love, despite the broccoli!" },
-            { number: 19, title: "Smoochy Screen Videos", desc: "I love when you send me videos kissing the screen! It's really cute.", icon: "fa-video", theme: "lavender", funFact: "I play them on loop." },
-            { number: 20, title: "Being Katchan's Dad", desc: "The way you care for Katchan — Despite how stingy he is, you look out for him.", icon: "fa-cat", theme: "rose", funFact: "He loves you deep down." },
-            { number: 21, title: "Pre-Shift Welcomes", desc: "Our hugs/kisses before your shifts — It's a cozy sanctuary where I can put my guard down.", icon: "fa-shield-heart", theme: "peach", funFact: "My favorite part of the day." },
-            { number: 22, title: "Love-You-More Competition", desc: "How you get competitive when I say 'I love you more' — I love those out-of-character moments.", icon: "fa-trophy", theme: "lavender", funFact: "I will ALWAYS win this argument!" },
-            { number: 23, title: "The Ultimate Door Opener", desc: "You always make sure to open the door for me. You make me feel so cared for.", icon: "fa-door-open", theme: "rose", funFact: "A perfect gentleman." },
-            { number: 24, title: "Inspirational Patience", desc: "Your patience with people and things you love — it inspires me daily.", icon: "fa-hourglass-half", theme: "peach", funFact: "Your heart is as big as the ocean." },
-            { number: 25, title: "High Emotional Intelligence", desc: "You communicate with everyone so well. I'm so proud of the man you are!", icon: "fa-brain", theme: "lavender", funFact: "My greatest brag." },
-            { number: 26, title: "The Gentle Giant", desc: "Lastly, I love that you are my gentle giant. You are a part of my world that brings me comfort, a safe corner where I can be myself.", icon: "fa-feather-pointed", theme: "rose", funFact: "You are my world, my baby. Happy 26th!" }
-        ];
-
-        let currentSlideIndex = -1;
-        const TOTAL_SLIDES = loveReasons.length + 2;
-
-        window.onload = () => {
-            const qrImage = document.getElementById("qr-code-img");
-            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(window.location.href + "#scanned")}`;
-            if (window.location.hash === "#scanned") showView("view-welcome");
-            else showView("view-creator");
-        };
-
-        function showView(v) {
-            ["view-creator", "view-welcome", "view-slides"].forEach(id => document.getElementById(id).classList.add("hidden"));
-            document.getElementById(v).classList.remove("hidden");
+    let current = 0;
+    function startGift() {
+        document.getElementById('screen1').classList.add('hidden');
+        document.getElementById('screen2').classList.remove('hidden');
+        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+        updateContent();
+    }
+    function nextSlide() {
+        if (current < slides.length - 1) {
+            current++;
+            updateContent();
+        } else {
+            document.getElementById('content').innerHTML = "<b>Happy Birthday again! I love you!</b>";
+            document.getElementById('nextBtn').style.display = 'none';
         }
-
-        function simulateScan() { window.location.hash = "scanned"; showView("view-welcome"); }
-        function transitionToSlides() { showView("view-slides"); currentSlideIndex = 0; renderSlide(); }
-
-        function renderSlide() {
-            const slideBox = document.getElementById("slide-box");
-            slideBox.innerHTML = "";
-            const progress = ((currentSlideIndex) / (TOTAL_SLIDES - 1)) * 100;
-            document.getElementById("slide-progress").style.width = `${progress}%`;
-            
-            if (currentSlideIndex === 0) {
-                document.getElementById("slide-label").innerText = "A Letter To You";
-                document.getElementById("slide-counter").innerText = "Intro";
-                slideBox.innerHTML = `<h2 class="title-font text-3xl text-rose-800">Happy 26th Birthday!</h2><p class="mt-4 text-xl handwritten">Here are 26 reasons I love you...</p>`;
-            } else if (currentSlideIndex === TOTAL_SLIDES - 1) {
-                document.getElementById("slide-label").innerText = "Forever Yours";
-                document.getElementById("slide-counter").innerText = "Outro";
-                slideBox.innerHTML = `<h2 class="title-font text-3xl text-rose-800">I love you so much!</h2><p class="mt-4 text-xl cozy-font">Happy birthday, my baby!</p>`;
-            } else {
-                const r = loveReasons[currentSlideIndex - 1];
-                document.getElementById("slide-label").innerText = `REASON ${r.number} OF 26`;
-                document.getElementById("slide-counter").innerText = `${r.number} / 26`;
-                slideBox.innerHTML = `<h3 class="text-2xl font-bold">${r.title}</h3><p class="mt-4">${r.desc}</p>`;
-            }
-        }
-
-        function nextSlide() { if (currentSlideIndex < TOTAL_SLIDES - 1) { currentSlideIndex++; renderSlide(); } }
-        function prevSlide() { if (currentSlideIndex > 0) { currentSlideIndex--; renderSlide(); } }
-    </script>
+    }
+    function updateContent() {
+        document.getElementById('content').innerHTML = slides[current];
+    }
+</script>
 </body>
 </html>
