@@ -590,8 +590,11 @@
       renderGif(containerEl, giphyCache[query]);
       return;
     }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
     try{
-      const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(query)}&limit=12&rating=g`);
+      const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(query)}&limit=12&rating=g`, {signal: controller.signal});
+      clearTimeout(timeout);
       const data = await res.json();
       if(data && data.data && data.data.length){
         const pick = data.data[Math.floor(Math.random()*data.data.length)];
@@ -602,6 +605,7 @@
         containerEl.style.display = 'none';
       }
     } catch(e){
+      clearTimeout(timeout);
       containerEl.style.display = 'none';
     }
   }
