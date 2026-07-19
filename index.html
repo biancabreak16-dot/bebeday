@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love! ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --bg: #fff5f5; --card: #ffffff; --text: #4a2828; --accent: #ff6b6b; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
+        /* Slide Styling */
+        .slide { background: var(--card); border-radius: 30px; padding: 2.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; display: none; border: 4px solid #ffecec; }
+        .slide.active { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        .arrow-nav { margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .btn { background: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        h1 { color: var(--accent); margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+<div id="deck"></div>
+
+<script>
+    const content = [
+        { title: "Welcome!", text: "Happy 26th birthday, my love! ❤️ [Click Start]" },
+        "Your snaggletooth smile - When you smile big, happy little crescents form in your eyes and the snaggletooth at the front reveals itself!",
+        "Your big pout - Whether it's a video call or in the flesh, your big pout is a real charmer!",
+        "Your bedhead - When you just got up and your hair is sticking in every direction!",
+        "When you do your little dance routine - The bang, the boogey, and the boobie!",
+        "The way you call me \"Bebe\" when you're worried - Your tone, your eyes, your body language!",
+        "The way you call me babe out loud - Somehow I feel like I'm blushing internally hehe.",
+        "The way you take care of your skin - I hope you could stick with using lip masks though hehe!",
+        "The way your hand always looks for me - Your hands always make sure you got me.",
+        "Speaking of hands - The way you lick the back of my hand sneakily!",
+        "The way you initiate to kiss - When you lean slow, smiling a little.",
+        "Talking about kisses - I love when you shower me with smoochy kisses!",
+        "The way you squeeze your eyes when you laugh so hard - You're totally a baby!",
+        "The tight hugs before you go - The tight hugs get extra necessary.",
+        "Your big sneaky hands - [Censored]",
+        "Your little bilins - Make me feel so taken care of. (Just don't go overboard >_<)",
+        "The way you started taking pictures of our food - You're so thoughtful.",
+        "The way you take on my challenge when I put vegetables on your plate - I love that you take on the challenge!",
+        "Your smoochy videos - It's really cute and the perspective makes your pout look bigger!",
+        "The way you care for Katchan - You're really his long lost dad!",
+        "The way we welcome each other with hugs/kisses before your shifts - I can finally put my guard down.",
+        "How you get competitive when I say \"I love you more\" - I love a little out of character breaks.",
+        "The way you always want to open the door no matter what - You make me feel so taken care of.",
+        "Your patience with people and things you love - I hope our baby gets that from you someday.",
+        "Your high emotional intelligence - I gotta say I'm proud I got a man like that!",
+        "The way you're a gentle giant - Your gentleness is louder than you are.",
+        "Lastly, I love that you are mine! - You're a part of my world that brings me comfort.",
+        "Thank God for your life. Spend more birthdays with me, my baby. I love you! ❤️"
+    ];
+
+    const deck = document.getElementById('deck');
+    content.forEach((item, i) => {
+        const slide = document.createElement('div');
+        slide.className = `slide ${i === 0 ? 'active' : ''}`;
+        slide.innerHTML = `
+            <h1>${i === 0 ? 'Surprise!' : 'Reason #' + i}</h1>
+            <p>${typeof item === 'string' ? item : item.text}</p>
+            <div class="arrow-nav">
+                <button class="btn" onclick="nav(-1)" ${i===0?'style="visibility:hidden"':''}>⬅️ Back</button>
+                <button class="btn" onclick="nav(1)">${i === content.length-1 ? 'Done' : 'Next ➡️'}</button>
+            </div>
+        `;
+        deck.appendChild(slide);
+    });
+
+    let idx = 0;
+    function nav(dir) {
+        const slides = document.querySelectorAll('.slide');
+        slides[idx].classList.remove('active');
+        idx += dir;
+        slides[idx].classList.add('active');
+        if (dir > 0) confetti({ particleCount: 50, origin: { y: 0.8 } });
+    }
+</script>
+</body>
+</html>
